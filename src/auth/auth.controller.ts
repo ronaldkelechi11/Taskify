@@ -25,6 +25,7 @@ export class AuthController {
         return this.authService.loginUser(username, password)
     }
 
+
     // GET /auth/profile --> []
     @UseGuards(AuthGuard)
     @Get('profile')
