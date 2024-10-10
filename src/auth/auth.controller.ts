@@ -13,7 +13,7 @@ export class AuthController {
         @Body('username') username: string,
         @Body('password') password: string
     ) {
-
+        return this.authService.registerUser(username, password);
     }
 
     // POST /auth/login --> []

@@ -14,25 +14,23 @@ export class AuthService {
 
     // LoginUser
     async loginUser(username: string, pass: string) {
-        // const user = await this.usersService.findOne(username);
-        // if (user?.password !== pass) {
-        //     throw new UnauthorizedException();
-        // }
 
-        // const payload = { sub: user._id, username: user.username };
-        // return {
-        //     access_token: await this.jwtService.signAsync(payload),
-        // };
     }
 
 
 
     // RegisterUser
     async registerUser(username: string, pass: string) {
-        //Username in use
-        const usernameInUse = this.userModel.findOne({ username: username })
+        //TODO: Check username already in use
+        const usernameInUse = await this.userModel.findOne({ username: username })
         if (usernameInUse) {
             throw new ConflictException('Username already in use')
+        }
+        else {
+            //TODO: Hash the password
+
+            //TODO: Add to database
+            this.userModel.create({ username: username, password: pass })
         }
     }
 }
