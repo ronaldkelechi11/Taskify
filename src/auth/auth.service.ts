@@ -12,6 +12,12 @@ export class AuthService {
         private jwtService: JwtService,
         @InjectModel(User.name) private userModel: Model<User>) { }
 
+    // Generate User Token
+    generateUsertoken(userId) {
+        const access_token = this.jwtService.sign({ userId });
+        return access_token;
+    }
+
     // LoginUser
     async loginUser(username: string, pass: string) {
         // check if username exists
@@ -29,13 +35,6 @@ export class AuthService {
             access_token: this.generateUsertoken(user._id)
         }
     }
-    // Generate User Token
-    generateUsertoken(userId) {
-        const access_token = this.jwtService.sign({ userId });
-        return access_token;
-    }
-
-
 
     // RegisterUser
     async registerUser(username: string, pass: string) {
@@ -45,8 +44,13 @@ export class AuthService {
             throw new ConflictException('Username already in use')
         }
         else {
-            //TODO: Hash the password
-            this.userModel.create({ username: username, password: pass })
+            const user = await this.userModel.create({ username: username, password: pass })
+            return {
+                message: 'User Signed Up',
+                access_token: this.generateUsertoken(user._id)
+            }
         }
     }
+
+
 }
