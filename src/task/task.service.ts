@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { log } from 'console';
 import { Model } from 'mongoose';
 import { Task } from 'src/utils/schemas/task.schema';
 
@@ -36,7 +35,7 @@ export class TaskService {
         }
     }
 
-    //TODO: Update task
+
     async updateTask(
         title: string,
         desc: string,
@@ -51,7 +50,7 @@ export class TaskService {
         if (task.description != desc) {
             updatedTask.description = desc
         }
-        const updateTask = await this.taskModel.findOneAndUpdate({ _id: taskId }, updatedTask)
+        await this.taskModel.findOneAndUpdate({ _id: taskId }, updatedTask)
 
         return { message: 'success' }
     }
