@@ -31,6 +31,6 @@ export class AuthController {
     @Get('profile')
     getProfile(@Request() req) {
         // req.user also has a child of username so you can use the username to search for the user info
-        return req.user;
+        return { userId: req.user.userId };
     }
 }

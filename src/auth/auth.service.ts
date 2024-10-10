@@ -39,15 +39,13 @@ export class AuthService {
 
     // RegisterUser
     async registerUser(username: string, pass: string) {
-        //TODO: Check username already in use
+
         const usernameInUse = await this.userModel.findOne({ username: username })
         if (usernameInUse) {
             throw new ConflictException('Username already in use')
         }
         else {
             //TODO: Hash the password
-
-            //TODO: Add to database
             this.userModel.create({ username: username, password: pass })
         }
     }
