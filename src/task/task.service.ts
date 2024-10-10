@@ -26,7 +26,7 @@ export class TaskService {
     }
 
     //TODO: delete task
-    async deleteTask() {
+    async deleteTask(taskId: string) {
 
     }
 
@@ -35,22 +35,20 @@ export class TaskService {
 
     }
 
-    // mark as Complete
     async markAsComplete(taskId: string) {
         const task = await this.taskModel.findById(taskId);
-
-        // update in DB
         await this.taskModel.findOneAndUpdate({ _id: taskId }, { isComplete: true })
-
         return {
             message: 'success',
             task: task
         };
     }
 
-    //TODO: list all task per user
+
     async listAllTaskForUser(userId: string) {
-        // Get user id
-        // search tasks for userID == assignedTo return []
+        const tasks = await this.taskModel.find({ assignedTo: userId });
+        return {
+            tasks
+        }
     }
 }
