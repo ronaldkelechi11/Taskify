@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { HydratedDocument } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { User } from "./user.schema";
 
-export type TaskDocument = HydratedDocument<Task>;
 
 @Schema()
-export class Task {
+export class Task extends Document {
     @Prop()
     title: string
 
