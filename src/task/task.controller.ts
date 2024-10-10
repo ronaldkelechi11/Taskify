@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TaskService } from './task.service';
 
@@ -36,6 +36,16 @@ export class TaskController {
     @Delete('delete/:id')
     deleteTask(@Param('id') id: string) {
         return this.taskService.deleteTask(id);
+    }
+
+    // PUT /task/update/taskId -->[]
+    @Put('update/:id')
+    updateTask(
+        @Param('id') id: string,
+        @Body('title') title: string,
+        @Body('desc') desc: string
+    ) {
+        return this.taskService.updateTask(title, desc, id)
     }
 
 

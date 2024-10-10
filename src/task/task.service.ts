@@ -1,13 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { log } from 'console';
 import { Model } from 'mongoose';
 import { Task } from 'src/utils/schemas/task.schema';
 
 @Injectable()
 export class TaskService {
     constructor(@InjectModel(Task.name) private taskModel: Model<Task>) { }
-    // Add task
+
+
     async createTask(
         title: string,
         desc: string,
@@ -25,14 +27,33 @@ export class TaskService {
         }
     }
 
-    //TODO: delete task
-    async deleteTask(taskId: string) {
 
+    async deleteTask(taskId: string) {
+        const deletedTask = await this.taskModel.findOneAndDelete({ _id: taskId })
+        return {
+            message: 'success',
+            deletedTask
+        }
     }
 
     //TODO: Update task
-    async updateTask() {
+    async updateTask(
+        title: string,
+        desc: string,
+        taskId: string,
+    ) {
+        const task = await this.taskModel.findById(taskId);
+        const updatedTask = task
 
+        if (task.title != title) {
+            updatedTask.title = title
+        }
+        if (task.description != desc) {
+            updatedTask.description = desc
+        }
+        const updateTask = await this.taskModel.findOneAndUpdate({ _id: taskId }, updatedTask)
+
+        return { message: 'success' }
     }
 
     async markAsComplete(taskId: string) {
