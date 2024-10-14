@@ -2,6 +2,8 @@
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
+const saltRounds = 10;
+import bcrypt from "bcrypt";
 import { Model } from "mongoose";
 import { User } from "src/utils/schemas/user.schema";
 
@@ -22,11 +24,14 @@ export class AuthService {
     async loginUser(username: string, pass: string) {
         // check if username exists
         const user = await this.userModel.findOne({ username: username })
+
+        const correctPassword = bcrypt.compare(pass, user.password);
+
         if (!user) {
             throw new BadRequestException('Wrong Credentials')
         }
-        // check if password is correct
-        else if (user.password != pass) {
+        // check if password is correct from hashedPassword
+        else if (!correctPassword) {
             throw new BadRequestException('Wrong Credentials')
         }
         // generate and JWT token
@@ -40,17 +45,17 @@ export class AuthService {
     async registerUser(username: string, pass: string) {
 
         const usernameInUse = await this.userModel.findOne({ username: username })
+        const hashedPassword = await bcrypt.hash(pass, saltRounds);
+
         if (usernameInUse) {
             throw new ConflictException('Username already in use')
         }
         else {
-            const user = await this.userModel.create({ username: username, password: pass })
+            const user = await this.userModel.create({ username: username, password: hashedPassword })
             return {
                 message: 'User Signed Up',
                 access_token: this.generateUsertoken(user._id)
             }
         }
     }
-
-
 }

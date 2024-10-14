@@ -3,10 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Task } from 'src/utils/schemas/task.schema';
+import { User } from 'src/utils/schemas/user.schema';
 
 @Injectable()
 export class TaskService {
-    constructor(@InjectModel(Task.name) private taskModel: Model<Task>) { }
+    constructor(
+        @InjectModel(Task.name) private taskModel: Model<Task>,
+        @InjectModel(User.name) private userModel: Model<User>) { }
 
 
     async createTask(
@@ -67,8 +70,11 @@ export class TaskService {
 
     async listAllTaskForUser(userId: string) {
         const tasks = await this.taskModel.find({ assignedTo: userId });
+        const user = await this.userModel.find({ _id: userId })
         return {
-            tasks
+            tasks: tasks,
+            username: user
         }
     }
 }
+
