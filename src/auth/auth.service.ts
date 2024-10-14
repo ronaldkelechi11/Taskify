@@ -3,7 +3,7 @@ import { BadRequestException, ConflictException, Injectable } from "@nestjs/comm
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 const saltRounds = 10;
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { Model } from "mongoose";
 import { User } from "src/utils/schemas/user.schema";
 
