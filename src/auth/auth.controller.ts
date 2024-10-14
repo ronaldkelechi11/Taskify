@@ -32,4 +32,11 @@ export class AuthController {
     getProfile(@Request() req) {
         return { userId: req.user.userId };
     }
+
+
+    // POST /auth/refresh
+    @Post('refresh')
+    refreshTokens(@Body('token') token: string) {
+        return this.authService.refreshToken(token);
+    }
 }
