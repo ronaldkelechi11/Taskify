@@ -44,6 +44,7 @@ export class AuthController {
     // POST /auth/logout
     @Post('logout')
     logout(@Body('userId') userId: string) {
+        return this.authService.logoutUser(userId);
     }
 
 }

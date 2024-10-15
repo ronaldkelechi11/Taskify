@@ -46,27 +46,36 @@ export class AuthService {
 
     // Generate AccessToken and RefreshToken then {DELETE} old
     async updateRefreshToken(userId, oldToken) {
-        const access_token = this.jwtService.sign(
-            {
-                userId
+        const alreadyExistToken = this.refreshTokenModel.findOne({ token: oldToken });
 
-            },
-            {
-                expiresIn: '15m' // access_token expires in 15 minutes
-            }
-        );
+        // If token in DB  doesn't exist return unauthorized error
+        if (!alreadyExistToken) {
+            throw new UnauthorizedException()
+        }
+        else {
+            const access_token = this.jwtService.sign(
+                {
+                    userId
 
-        const refresh_token = this.jwtService.sign(
-            {
-                userId
-            },
-            {
-                expiresIn: '4d' // refresh_token expires in 4 days
-            }
-        );
-        await this.refreshTokenModel.findOneAndDelete({ token: oldToken });
-        await this.refreshTokenModel.create({ token: refresh_token, userId: userId })
-        return { access_token: access_token, refresh_token: refresh_token };
+                },
+                {
+                    expiresIn: '15m' // access_token expires in 15 minutes
+                }
+            );
+
+            const refresh_token = this.jwtService.sign(
+                {
+                    userId
+                },
+                {
+                    expiresIn: '4d' // refresh_token expires in 4 days
+                }
+            );
+            await this.refreshTokenModel.findOneAndDelete({ token: oldToken });
+            await this.refreshTokenModel.create({ token: refresh_token, userId: userId })
+            return { access_token: access_token, refresh_token: refresh_token };
+        }
+
     }
 
     // Verify refresh token
@@ -147,6 +156,10 @@ export class AuthService {
     //Logout user
     async logoutUser(userId) {
         // Find refresh-token with that userId and then delete it
+        this.refreshTokenModel.findOneAndDelete({ userId: userId })
+        return {
+            message: 'Successful'
+        }
     }
 
 }
