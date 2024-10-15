@@ -70,11 +70,8 @@ export class TaskService {
 
     async listAllTaskForUser(userId: string) {
         const tasks = await this.taskModel.find({ assignedTo: userId });
-        const user = await this.userModel.findOne({ _id: userId });
-        user.password = '';
         return {
-            tasks: tasks,
-            user: user
+            tasks: tasks
         }
     }
 }

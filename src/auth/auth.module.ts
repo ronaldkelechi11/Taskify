@@ -23,8 +23,7 @@ import { RefreshToken, RefreshTokenSchema } from "src/utils/schemas/refresh-toke
         ]),
         JwtModule.register({
             global: true,
-            secret: jwtConstants.secret,
-            signOptions: { expiresIn: '30m' }
+            secret: jwtConstants.secret
         }),
     ],
     providers: [AuthService],

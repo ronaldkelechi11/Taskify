@@ -2,6 +2,7 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
+import { userInfo } from "os";
 
 @Controller('auth')
 export class AuthController {
@@ -39,4 +40,10 @@ export class AuthController {
     refreshTokens(@Body('token') token: string) {
         return this.authService.refreshToken(token);
     }
+
+    // POST /auth/logout
+    @Post('logout')
+    logout(@Body('userId') userId: string) {
+    }
+
 }
