@@ -20,7 +20,6 @@ export class AdminGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    // Decode Jwt token
     const payload = await this.jwtService.verifyAsync(
       token,
       {
@@ -28,9 +27,7 @@ export class AdminGuard implements CanActivate {
       }
     );
 
-    console.log(payload.userId);
     const user = await this.authService.findById(payload.userId);
-    console.log(user);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
