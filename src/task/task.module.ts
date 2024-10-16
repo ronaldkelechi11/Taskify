@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from 'src/utils/schemas/task.schema';
 import { User, UserSchema } from 'src/utils/schemas/user.schema';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
     imports: [
@@ -20,11 +21,12 @@ import { User, UserSchema } from 'src/utils/schemas/user.schema';
                 },
             ]
         ),
+        AuthModule
     ],
     controllers: [
         TaskController,],
     providers: [
-        TaskService,],
+        TaskService],
     exports: [TaskService]
 })
 export class TaskModule { }
