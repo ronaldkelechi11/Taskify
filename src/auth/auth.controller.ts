@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { AuthGuard } from "./auth.guard";
-import { userInfo } from "os";
+import { User } from "./decorator/user.decorator";
+import { AuthGuard } from "./guards/auth.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -26,14 +26,12 @@ export class AuthController {
         return this.authService.loginUser(username, password)
     }
 
-
     // GET /auth/profile --> []
     @UseGuards(AuthGuard)
     @Get('profile')
-    getProfile(@Request() req) {
-        return { userId: req.user.userId };
+    getProfile(@User() userId: string) {
+        return { userId: userId };
     }
-
 
     // POST /auth/refresh
     @Post('refresh')
@@ -43,8 +41,8 @@ export class AuthController {
 
     // POST /auth/logout
     @Post('logout')
-    logout(@Body('userId') userId: string) {
-        return this.authService.logoutUser(userId);
+    logout(@Body('token') token: string) {
+        return this.authService.logoutUser(token);
     }
 
 }

@@ -18,7 +18,6 @@ export class AuthService {
         @InjectModel(RefreshToken.name) private refreshTokenModel: Model<RefreshToken>) { }
 
 
-
     // Generate AccessToken and RefreshToken then {SAVE}
     async generateUsertoken(userId) {
         const access_token = this.jwtService.sign(
@@ -97,18 +96,15 @@ export class AuthService {
         }
     }
 
-
-
-
-
-
+    // Find by Id for AdminGuard
+    async findById(id) {
+        return await this.userModel.findOne({ _id: id })
+    }
 
 
 
     // LoginUser
     async loginUser(username: string, pass: string) {
-        console.log(pass, username);
-
         const user = await this.userModel.findOne({ username: username })
 
         if (!user) {
@@ -154,9 +150,10 @@ export class AuthService {
     }
 
     //Logout user
-    async logoutUser(userId) {
+    async logoutUser(token) {
         // Find refresh-token with that userId and then delete it
-        this.refreshTokenModel.findOneAndDelete({ userId: userId })
+        await this.refreshTokenModel.findOneAndDelete({ token: token })
+
         return {
             message: 'Successful'
         }
