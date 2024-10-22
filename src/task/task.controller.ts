@@ -17,7 +17,7 @@ export class TaskController {
     constructor(private taskService: TaskService) { }
 
     // GET task for a particular
-    @Roles(UserRole.USER, UserRole.ADMIN)
+    @Roles()
     @Get()
     allTasks(@User() userId) {
         return this.taskService.listAllTaskForUser(userId);
@@ -53,7 +53,6 @@ export class TaskController {
     @Roles(UserRole.ADMIN)
     @Get('/admin')
     getAllTasks() {
-        return 'success'
+        return this.taskService.listAllTasks()
     }
-
 }

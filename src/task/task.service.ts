@@ -95,6 +95,11 @@ export class TaskService {
             tasks: tasks
         }
     }
+
+    async listAllTasks() {
+        const tasks = await this.taskModel.find();
+        return { tasks }
+    }
 }
 
 

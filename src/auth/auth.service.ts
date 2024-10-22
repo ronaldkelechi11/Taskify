@@ -27,7 +27,7 @@ export class AuthService {
 
             },
             {
-                expiresIn: '15m' // access_token expires in 15 minutes
+                expiresIn: '1h' // access_token expires in 15 minutes
             }
         );
         const refresh_token = this.jwtService.sign(
