@@ -9,13 +9,13 @@ export class Room extends Document {
   @Prop()
   name: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId }], ref: 'User' })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
   members: User[];
 
-  @Prop({ type: { type: mongoose.Schema.Types.ObjectId }, ref: 'User' })
-  admin: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  admin: User;
 
-  @Prop({ type: { type: mongoose.Schema.Types.ObjectId }, ref: 'User' })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }] })
   tasks: Task[];
 }
 

@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "670e6e5b1dbfeb5ce4ca7cd3"
+  },
+  "username": "admin@taskify",
+  "password": "$2b$10$RAvEFg/OOckoJsz5zMZ9duCL0BvN2O38WzrZ1ILbTWfzBCXNO2xvm",
+  "role": "admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670f8c33a6050f457fd89ef2"
+  },
+  "username": "john_doe",
+  "password": "$2b$10$Pe9c8Q/uFORFQZpBOttpT.p5yAyGde5JNF.px6.VKEBDuyYXjroce",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67162051eae5271ce64ae15e"
+  },
+  "username": "ronald_kelechi",
+  "password": "$2b$10$ombyd6KG5FzgviQLOD2DxuXrWnFs8K.3FkUq1oSUQ/TzAL7USYLKi",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67163eeb379368c224a511c0"
+  },
+  "username": "ij_kc",
+  "password": "$2b$10$VJUGr/fSLudzfhKbCzRA.eaZpDQ4/4Nogsb.RmDiED9RCeQZ5vkQa",
+  "role": "user",
+  "__v": 0
+}]
