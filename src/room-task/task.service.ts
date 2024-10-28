@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ export class TaskService {
     @InjectModel(User.name) private _userModel: Model<User>,
     @InjectModel(Room.name) private _roomModel: Model<Room>,
   ) {}
+  private message = { message: 'success' };
 
   //   create Task
   async createTask(
@@ -44,29 +46,64 @@ export class TaskService {
       });
     }
 
-    await this._taskModel.create({
+    const task = this._taskModel.create({
       title: title,
       description: desc,
       assignedTo: userIdArray,
     });
-    return { message: 'success' };
+
+    await this._roomModel.findOneAndUpdate(
+      { _id: roomId },
+      { $push: { tasks: (await task)._id } },
+    );
+
+    return this.message;
   }
 
   //   List all task
   async listAllTask(roomId) {
-    const allRoomTask = await this._roomModel.findById(roomId);
-    return {
-      tasks: allRoomTask.tasks,
-    };
+    const allRoomTask = (await this._roomFromId(roomId)).populate('tasks');
+    return (await allRoomTask).tasks;
   }
 
   //   List all task for USER
   async listTaskForSpecificUser(userId) {
     const userTask = await this._taskModel.find({ assignedTo: userId });
-    return [userTask];
+    return userTask;
   }
+
   //   Edit task
+  async updateTask(title, desc, roomId) {
+    const task = await this._taskModel.findOne({ _id: roomId });
+    const updateTask = task;
+
+    if (title != updateTask.title) {
+      updateTask.title = title;
+    }
+    if (desc != updateTask.description) {
+      updateTask.description = desc;
+    }
+
+    await this._taskModel.findOneAndUpdate({ _id: task._id }, updateTask);
+    return this.message;
+  }
+
   //   Delete task
+  async deleteTask(taskId, roomId) {
+    const task = await this._taskModel.findOne({ _id: taskId });
+    console.log(task);
+
+    await this._roomModel
+      .findOneAndUpdate({ _id: roomId }, { $pull: { tasks: (await task)._id } })
+      .then(async (result) => {
+        await this._taskModel.deleteOne({ _id: task._id });
+      })
+      .catch((err) => {
+        throw new ConflictException(err);
+      });
+
+    return this.message;
+  }
   //   mark complete
 
   //   _________EXTRAS__________
@@ -76,7 +113,7 @@ export class TaskService {
     return user;
   }
 
-  async roomFromId(roomId): Promise<Room> {
+  async _roomFromId(roomId): Promise<Room> {
     const room = this._roomModel.findOne({ _id: roomId });
     if (!room) {
       throw new NotFoundException('Room does not exist');

@@ -1,5 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskDto } from 'src/utils/dto/task.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -28,8 +36,15 @@ export class TaskController {
     return this._taskService.listTaskForSpecificUser(userId);
   }
 
+  @UseGuards(RoleGuard)
   @Get('admin')
   getAllRoomTask(@Room() roomId: string) {
     return this._taskService.listAllTask(roomId);
+  }
+
+  @UseGuards(RoleGuard)
+  @Delete()
+  deleteTask(@Room() roomId: string, @Body('taskId') taskId: string) {
+    return this._taskService.deleteTask(taskId, roomId);
   }
 }
