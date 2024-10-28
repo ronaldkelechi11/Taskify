@@ -95,7 +95,7 @@ export class TaskService {
 
     await this._roomModel
       .findOneAndUpdate({ _id: roomId }, { $pull: { tasks: (await task)._id } })
-      .then(async (result) => {
+      .then(async () => {
         await this._taskModel.deleteOne({ _id: task._id });
       })
       .catch((err) => {
