@@ -11,10 +11,10 @@ export class Task extends Document {
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({ immutable: true, default: Date.now() })
   createdAt: string;
 
-  @Prop()
+  @Prop({ default: false })
   isComplete: boolean;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })

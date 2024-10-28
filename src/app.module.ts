@@ -1,3 +1,4 @@
+import { TaskModule } from './room-task/task.module';
 import { MemberModule } from './room-member/member.module';
 /* eslint-disable prettier/prettier */
 import { RoomModule } from './room/room.module';
@@ -8,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    TaskModule,
     MemberModule,
     RoomModule,
     AuthModule,
