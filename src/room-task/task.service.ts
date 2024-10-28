@@ -104,7 +104,15 @@ export class TaskService {
 
     return this.message;
   }
+
   //   mark complete
+  async markComplete(taskId) {
+    await this._taskModel.findOneAndUpdate(
+      { _id: taskId },
+      { isComplete: true, completedAt: Date.now() },
+    );
+    return this.message;
+  }
 
   //   _________EXTRAS__________
   async _userFromUsername(username): Promise<User | User[]> {

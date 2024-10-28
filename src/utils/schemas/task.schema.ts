@@ -14,6 +14,9 @@ export class Task extends Document {
   @Prop({ immutable: true, default: Date.now() })
   createdAt: string;
 
+  @Prop()
+  completedAt: string;
+
   @Prop({ default: false })
   isComplete: boolean;
 

@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
@@ -46,5 +47,23 @@ export class TaskController {
   @Delete()
   deleteTask(@Room() roomId: string, @Body('taskId') taskId: string) {
     return this._taskService.deleteTask(taskId, roomId);
+  }
+
+  @UseGuards(RoleGuard)
+  @Put()
+  updateTask(@Body() taskDto: TaskDto, @Room() roomId: string) {
+    return this._taskService.updateTask(
+      taskDto.title,
+      taskDto.description,
+      roomId,
+    );
+  }
+
+  @UseGuards(RoleGuard)
+  @Put('/status')
+  markTaskComplete(@Body('taskId') taskId: string) {
+    console.log(taskId);
+
+    return this._taskService.markComplete(taskId);
   }
 }
